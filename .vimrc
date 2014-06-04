@@ -4,20 +4,6 @@ set nocompatible
 " enable syntax highlighting
 syntax enable
 
-" configure Vundle
-filetype on " without this vim emits a zero exit status, later, because of :ft off
-filetype off
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-
-" install Vundle bundles
-if filereadable(expand("~/.vimrc.bundles"))
-  source ~/.vimrc.bundles
-  source ~/.vimrc.bundles.local
-endif
-
-" ensure ftdetect et al work by including this after the Vundle stuff
-filetype plugin indent on
 
 set autoindent
 set autoread                                                 " reload files when changed on disk, i.e. via `git checkout`
@@ -71,7 +57,6 @@ map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimr
 
 " plugin settings
 let g:ctrlp_match_window = 'order:ttb,max:20'
-let g:NERDSpaceDelims=1
 let g:gitgutter_enabled = 0
 
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
@@ -89,13 +74,6 @@ endif
 autocmd BufRead,BufNewFile *.fdoc set filetype=yaml
 " md is markdown
 autocmd BufRead,BufNewFile *.md set filetype=markdown
-" extra rails.vim help
-autocmd User Rails silent! Rnavcommand decorator      app/decorators            -glob=**/* -suffix=_decorator.rb
-autocmd User Rails silent! Rnavcommand observer       app/observers             -glob=**/* -suffix=_observer.rb
-autocmd User Rails silent! Rnavcommand feature        features                  -glob=**/* -suffix=.feature
-autocmd User Rails silent! Rnavcommand job            app/jobs                  -glob=**/* -suffix=_job.rb
-autocmd User Rails silent! Rnavcommand mediator       app/mediators             -glob=**/* -suffix=_mediator.rb
-autocmd User Rails silent! Rnavcommand stepdefinition features/step_definitions -glob=**/* -suffix=_steps.rb
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
 
@@ -126,7 +104,6 @@ endif
 set background=dark
 colorscheme solarized
 
-execute pathogen#infect()
 syntax on
 filetype plugin indent on
 
