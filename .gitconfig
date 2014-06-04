@@ -1,0 +1,8 @@
+[user]
+	email = kohli_varun5@yahoo.com
+	name = Varun Kohli
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f
+[diff]
+    tool = tkdiff
