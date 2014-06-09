@@ -213,4 +213,4 @@ unlet s:cposet
 
 command! -buffer RevisedSyntax  update | call views#View("exec",["camlp4o", 'pr_r.cmo', expand('%')])
 
-" vim:sw=2
+set sw=2

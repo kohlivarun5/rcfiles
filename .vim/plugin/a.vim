@@ -99,6 +99,10 @@ call <SID>AddAlternateExtensionMapping('ypp',"lpp,l,lex")
 " Mappings for OCaml
 call <SID>AddAlternateExtensionMapping('ml',"mli")
 call <SID>AddAlternateExtensionMapping('mli',"ml")
+
+call <SID>AddAlternateExtensionMapping('mf',"mfi")
+call <SID>AddAlternateExtensionMapping('mfi',"mf")
+
 " ASP stuff
 call <SID>AddAlternateExtensionMapping('aspx.cs', 'aspx')
 call <SID>AddAlternateExtensionMapping('aspx.vb', 'aspx')
