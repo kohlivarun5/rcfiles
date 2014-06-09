@@ -1,6 +1,12 @@
 " don't bother with vi compatibility
 syntax on
 syntax enable
+
+set autoindent
+set autoread                                                 " reload files when changed on disk, i.e. via `git checkout`
+set backspace=2                                              " Fix broken backspace in some setups
+set backupcopy=yes                                           " see :help crontab
+
 set et
 set ai
 set cin
@@ -37,6 +43,15 @@ set wildmenu                                                 " show a navigable 
 set wildmode=longest,list,full
 set smartcase                                                " case-sensitive search if any caps
 set hlsearch
+set encoding=utf-8
+set expandtab                                                " expand tabs to spaces
+set ignorecase  
+set shiftwidth=4                                             " normal mode indentation commands use 2 spaces
+set showcmd
+set smartcase                                                " case-sensitive search if any caps
+set softtabstop=4                                            " insert mode tab and backspace use 2 spaces
+set tabstop=4                                               " actual tabs occupy 8 characters
+set wildignore=log/**,node_modules/**,target/**,tmp/**,*.rbc
 
 inoremap { {}<Esc>:let leavechar="}"<CR>i
 
