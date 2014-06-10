@@ -68,10 +68,6 @@ endif
 autocmd BufRead,BufNewFile *.fdoc set filetype=yaml
 " md is markdown
 autocmd BufRead,BufNewFile *.md set filetype=markdown
-<<<<<<< HEAD
-" extra rails.vim help
-=======
->>>>>>> 5bf05ff50a8a969e50c1b9c57188128ec7dd7610
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
 
