@@ -4,14 +4,6 @@ set nocompatible
 " enable syntax highlighting
 syntax enable
 
-" configure Vundle
-filetype on " without this vim emits a zero exit status, later, because of :ft off
-filetype off
-
-
-" ensure ftdetect et al work by including this after the Vundle stuff
-filetype plugin indent on
-
 set autoindent
 set autoread                                                 " reload files when changed on disk, i.e. via `git checkout`
 set backspace=2                                              " Fix broken backspace in some setups
@@ -59,7 +51,6 @@ map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimr
 
 " plugin settings
 let g:ctrlp_match_window = 'order:ttb,max:20'
-let g:NERDSpaceDelims=1
 let g:gitgutter_enabled = 0
 
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
@@ -77,7 +68,10 @@ endif
 autocmd BufRead,BufNewFile *.fdoc set filetype=yaml
 " md is markdown
 autocmd BufRead,BufNewFile *.md set filetype=markdown
+<<<<<<< HEAD
 " extra rails.vim help
+=======
+>>>>>>> 5bf05ff50a8a969e50c1b9c57188128ec7dd7610
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
 
