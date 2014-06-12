@@ -23,8 +23,7 @@ shopt -s extglob
 
 eval `opam config env`
 #Go to Home
-home
-source /Users/varunkohli/.rvm/scripts/rvm 
+#home
 alias gitdiff='git difftool --no-prompt'
 
 export PS1="\[\033[36m\]\w\[\033[m\]@\[\033[32m\] \[\033[33;1m\](\$(git branch 2>/dev/null | grep '^*' | colrm 1 2))\033[m\]\n\$ "
