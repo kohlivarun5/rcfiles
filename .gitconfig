@@ -3,4 +3,6 @@
 	name = Varun Kohli
 [filter "media"]
 	clean = git-media-clean %f
-	smudge = git-media-smudge %f
+    smudge = git-media-smudge %f
+[diff]
+    tool = tkdiff

@@ -67,7 +67,6 @@ if has("gui_running")
     endif
 endif
 
-
 " plugin settings
 let g:ctrlp_match_window = 'order:ttb,max:20'
 
@@ -77,8 +76,6 @@ autocmd BufRead,BufNewFile *.fdoc set filetype=yaml
 autocmd BufRead,BufNewFile *.md set filetype=markdown
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
-
-"filetype plugin indent on
 
 set clipboard=unnamed
 

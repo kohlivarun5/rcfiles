@@ -2,7 +2,6 @@ let s:efm = 'set efm=%+AFile\ \"%f\"\\,\ line\ %l\\,\ characters\ %c-%*\\d:,%Z%m
 let s:opts = [ '-pp', 'camlp4o' ]
 "call actions#AddAction('ocamlc current file', {'follow_up' : 'run compiler result', 'action': funcref#Function('actions#CompileRHSSimple', {'args': [[s:efm], ["ocamlc", '-g', '-annot', '-pp', 'camlp4o', '-o', funcref#Function('return expand("%:r:t")'), funcref#Function('return expand("%")')]]})})
 "call actions#AddAction('ocamlopt current file', {'follow_up' : 'run compiler result', 'action': funcref#Function('actions#CompileRHSSimple', {'args': [[s:efm], ["ocamlopt", '-g', '-annot', '-pp', 'camlp4o', '-o', funcref#Function('return expand("%:r:t")'), funcref#Function('return expand("%")')]]})})
-
 command! OcamlSetEFM exec s:efm
 
 " vam#DefineAndBind('s:c','g:addon_ocaml','{}')
