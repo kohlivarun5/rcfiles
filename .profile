@@ -47,7 +47,6 @@ if [[ $platform == "Darwin" ]]; then
     eval `opam config env`
 fi;    
 
-eval `opam config env`
 #Go to Home
 #home
 alias gitdiff='git difftool --no-prompt &'
