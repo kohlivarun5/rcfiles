@@ -23,7 +23,7 @@ alias cat='\cat -n -s'
 alias cl='\clear; pwd'
 alias ls='cl; \ls -A -a -F -G -h -l -p'
 #Go to Home
-alias gitdiff='git difftool'
+alias gitdiff='xterm -e "git difftool --no-prompt"'
 alias findcpp='find . -name "*.h" -o -name "*.cpp" -o -name "*.c"'
 alias findpy='find . -name "*.h" -o -name "*.cpp" -o -name "*.c"'
 alias grepcpp='findcpp | xargs grep '
@@ -46,10 +46,6 @@ shopt -s extglob
 if [[ $platform == "Darwin" ]]; then 
     eval `opam config env`
 fi;    
-
-#Go to Home
-#home
-alias gitdiff='git difftool --no-prompt &'
 
 if [[ $platform == "Darwin" ]]; then 
     export PS1="\[\033[36m\]\w\[\033[m\]@\[\033[32m\] \[\033[33;1m\](\$(git branch 2>/dev/null | grep '^*' | colrm 1 2))\033[m\]  \$ "

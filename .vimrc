@@ -67,9 +67,6 @@ if has("gui_running")
     endif
 endif
 
-" plugin settings
-let g:ctrlp_match_window = 'order:ttb,max:20'
-
 " fdoc is yaml
 autocmd BufRead,BufNewFile *.fdoc set filetype=yaml
 " md is markdown
@@ -124,3 +121,4 @@ if filereadable(expand("~/.vimrc.local"))
   " noremap! jj <ESC>
   source ~/.vimrc.local
 endif
+
