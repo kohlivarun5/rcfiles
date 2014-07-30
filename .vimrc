@@ -16,8 +16,8 @@ set number
 set noignorecase
 set shiftwidth=4
 set tabstop=4
-set wrapmargin=78
-set textwidth=78
+"set wrapmargin=78
+"set textwidth=78
 set sm
 set ruler
 set nocp
@@ -25,7 +25,7 @@ set nocp
 "set smartindent
 set backspace=2
 set spell
-set columns=78
+"set columns=78
 set tags+=tags;$HOME
 set noeb
 set background=dark
