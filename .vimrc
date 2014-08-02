@@ -3,9 +3,9 @@ syntax on
 syntax enable
 
 set autoindent
-set autoread                                                 " reload files when changed on disk, i.e. via `git checkout`
-set backspace=2                                              " Fix broken backspace in some setups
-set backupcopy=yes                                           " see :help crontab
+set autoread    " reload files when changed on disk, i.e. via `git checkout`
+set backspace=2 " Fix broken backspace in some setups
+set backupcopy=yes " see :help crontab
 
 set et
 set ai
@@ -37,7 +37,7 @@ set incsearch                                                " search as you typ
 set laststatus=2                                             " always show statusline
 set number                                                   " show line numbers
 set ruler                                                    " show where you are
-set scrolloff=3
+"set scrolloff=3
 set incsearch                                                " search as you type
 set wildmenu                                                 " show a navigable menu for tab completion
 set wildmode=longest,list,full
