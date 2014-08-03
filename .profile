@@ -21,7 +21,8 @@ fi;
 alias rm='\rm -i'
 alias cat='\cat -n -s'
 alias cl='\clear; pwd'
-alias ls='cl; \ls -A -a -F -G -h -l -p'
+
+alias ls='cl; \ls -A -a -F -G -h -l -p '
 #Go to Home
 alias gitdiff='git difftool --no-prompt'
 alias gd='xterm -e "git difftool --no-prompt"'

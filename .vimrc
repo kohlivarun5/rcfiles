@@ -14,15 +14,20 @@ set ru
 set showmode
 set number
 set noignorecase
+
 set shiftwidth=4
 set tabstop=4
+set softtabstop=4 " insert mode tab and backspace use 2 spaces
+set expandtab     " expand tabs to spaces
 "set wrapmargin=78
 "set textwidth=78
+
 set sm
 set ruler
 set nocp
-"set autoindent
-"set smartindent
+set autoindent
+set smartindent
+
 set backspace=2
 set spell
 "set columns=78
@@ -44,13 +49,9 @@ set wildmode=longest,list,full
 set smartcase                                                " case-sensitive search if any caps
 set hlsearch
 set encoding=utf-8
-set expandtab                                                " expand tabs to spaces
 set ignorecase  
-set shiftwidth=4                                             " normal mode indentation commands use 2 spaces
 set showcmd
 set smartcase                                                " case-sensitive search if any caps
-set softtabstop=4                                            " insert mode tab and backspace use 2 spaces
-set tabstop=4                                               " actual tabs occupy 8 characters
 set wildignore=log/**,node_modules/**,target/**,tmp/**,*.rbc
 
 inoremap { {}<Esc>:let leavechar="}"<CR>i
@@ -74,6 +75,9 @@ autocmd BufRead,BufNewFile *.md set filetype=markdown
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
 
+autocmd BufRead,BufNewFile *.py set filetype=python
+au BufRead,BufNewFile *.mfi,*.mf,*.ml,*.mli,*.mll,*.mly,.ocamlinit set ft=ocaml
+
 set clipboard=unnamed
 
 " Method 1 (for Xwindows and mswindows), this map is different from the one shown in vim documentation:
@@ -87,7 +91,7 @@ if has("gui_running")
     if has("gui_gtk2")
         set guifont=Monospace\ 16
     elseif has("gui_macvim")
-        set guifont=Menlo\ Regular:h16
+        set guifont=Menlo\ Regular:h13
     elseif has("gui_win32")
         set guifont=Consolas:h16:cANSI
     endif
@@ -107,7 +111,7 @@ cmap fr<Space> FuzzyFinderMruFile<CR>
 cmap ff<Space> FuzzyFinderFile<CR>
 
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-match OverLength /\%79v.\+/
+match OverLength /\%78v.\+/
 
 if filereadable(expand("~/.vimrc.local"))
   " In your .vimrc.local, you might like:
@@ -122,3 +126,6 @@ if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
 endif
 
+
+autocmd vimenter * NERDTree
+let NERDTreeIgnore = ['\.pyc$']

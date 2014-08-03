@@ -213,8 +213,8 @@ unlet s:cposet
 
 command! -buffer RevisedSyntax  update | call views#View("exec",["camlp4o", 'pr_r.cmo', expand('%')])
 
-set softtabstop=2
-    " insert mode tab and backspace use 2 space
-set shiftwidth=2
-set tabstop=2
-
+setlocal tabstop=2
+setlocal softtabstop=2
+setlocal shiftwidth=2
+setlocal smarttab
+setlocal expandtab
