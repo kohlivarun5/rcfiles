@@ -6,3 +6,6 @@
     smudge = git-media-smudge %f
 [diff]
     tool = tkdiff
+
+[difftool]
+  prompt = false
