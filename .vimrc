@@ -127,5 +127,6 @@ if filereadable(expand("~/.vimrc.local"))
 endif
 
 
-autocmd vimenter * NERDTree
+"autocmd vimenter * NERDTree
 let NERDTreeIgnore = ['\.pyc$']
+let g:indent_guides_guide_size=1
