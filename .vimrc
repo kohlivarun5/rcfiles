@@ -54,6 +54,13 @@ set showcmd
 set smartcase                                                " case-sensitive search if any caps
 set wildignore=log/**,node_modules/**,target/**,tmp/**,*.rbc
 
+
+set guioptions-=T  " Remove toolbar for gvim
+set guioptions-=t
+set guioptions-=m  "remove menu bar
+set guioptions-=r  "remove right-hand scroll bar
+
+
 inoremap { {}<Esc>:let leavechar="}"<CR>i
 
 syntax on
