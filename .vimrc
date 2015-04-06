@@ -54,6 +54,13 @@ set showcmd
 set smartcase                                                " case-sensitive search if any caps
 set wildignore=log/**,node_modules/**,target/**,tmp/**,*.rbc
 
+
+"set guioptions-=T  " Remove toolbar for gvim
+set guioptions-=t
+set guioptions-=m  "remove menu bar
+"set guioptions-=r  "remove right-hand scroll bar
+
+
 inoremap { {}<Esc>:let leavechar="}"<CR>i
 
 syntax on
@@ -126,6 +133,53 @@ if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
 endif
 
+if filereadable(expand("~/.vimrc.dlib"))
+  " In your .vimrc.local, you might like:
+  "
+  " set autowrite
+  " set nocursorline
+  " set nowritebackup
+  " set whichwrap+=<,>,h,l,[,] " Wrap arrow keys between lines
+  "
+  " autocmd! bufwritepost .vimrc source ~/.vimrc
+  " noremap! jj <ESC>
+  source ~/.vimrc.dlib
+endif
 
-autocmd vimenter * NERDTree
+
+"autocmd vimenter * NERDTree
 let NERDTreeIgnore = ['\.pyc$']
+let g:indent_guides_guide_size=1
+
+"let g:indent_guides_auto_colors = 0
+"autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=darkslategray   ctermbg=3
+"autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=grey99 ctermbg=4
+"
+let s:pattern = '^\(.* \)\([1-9][0-9]*\)$'
+let s:minfontsize = 6
+let s:maxfontsize = 24
+function! AdjustFontSize(amount)
+  if has("gui_gtk2") && has("gui_running")
+    let fontname = substitute(&guifont, s:pattern, '\1', '')
+    let cursize = substitute(&guifont, s:pattern, '\2', '')
+    let newsize = cursize + a:amount
+    if (newsize >= s:minfontsize) && (newsize <= s:maxfontsize)
+      let newfont = fontname . newsize
+      let &guifont = newfont
+    endif
+  else
+    echoerr "You need to run the GTK2 version of Vim to use this function."
+  endif
+endfunction
+
+function! LargerFont()
+  call AdjustFontSize(1)
+endfunction
+command! LargerFont call LargerFont()
+map <C-PageUp> :LargerFont<CR>
+
+function! SmallerFont()
+  call AdjustFontSize(-1)
+endfunction
+command! SmallerFont call SmallerFont()
+map <C-PageDown> :SmallerFont<CR>
