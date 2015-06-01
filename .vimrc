@@ -14,6 +14,7 @@ set ru
 set showmode
 set number
 set noignorecase
+set cc=78
 
 set shiftwidth=4
 set tabstop=4
