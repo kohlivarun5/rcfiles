@@ -14,7 +14,7 @@ set ru
 set showmode
 set number
 set noignorecase
-set cc=78
+" set cc=78
 
 set shiftwidth=4
 set tabstop=4
@@ -31,7 +31,7 @@ set smartindent
 
 set backspace=2
 set spell
-"set columns=78
+set columns=78
 set tags+=tags;$HOME
 set noeb
 set background=dark
@@ -97,7 +97,7 @@ vnoremap y "+y
 
 if has("gui_running")
     if has("gui_gtk2")
-        set guifont=Monospace\ 16
+        set guifont=Monospace\ 18
     elseif has("gui_macvim")
         set guifont=Menlo\ Regular:h13
     elseif has("gui_win32")

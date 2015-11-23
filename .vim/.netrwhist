@@ -1,5 +1,5 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_cnt =9
 let g:netrw_dirhist_1='/Users/varunkohli/SkyDrive/GitHub/pycaml'
 let g:netrw_dirhist_2='/Users/varunkohli/SkyDrive/GitHub/hive-gae/web-app/Oauth'
 let g:netrw_dirhist_3='/Users/vkohli/OneDrive/GitHub/hive-gae/web-app/Activity'
@@ -8,3 +8,4 @@ let g:netrw_dirhist_5='/Users/vkohli/OneDrive/GitHub/hive-gae/Notifications'
 let g:netrw_dirhist_6='/bb/mbigd/mbig2802/dlib/m_dlibst'
 let g:netrw_dirhist_7='/bb/mbig/mbig2802/dlib/dlibcoretypes'
 let g:netrw_dirhist_8='/bb/mbigd/mbig2802/dlib/iboxtypes/schema/ibtypesTemp'
+let g:netrw_dirhist_9='/bb/mbigd/mbig2802/bbgh/dliblisted'
