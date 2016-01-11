@@ -67,6 +67,12 @@ else
     prompt
 fi;
 
+#Colorization options
+export TERM=xterm-color
+export GREP_OPTIONS='--color=auto'
+export LSCOLORS=ExFxCxDxBxegedabagacad
+export CLICOLOR=1
+
 if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash
 fi 
