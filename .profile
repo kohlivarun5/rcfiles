@@ -49,23 +49,25 @@ shopt -s extglob
 #     eval `opam config env`
 # fi;    
 
-if [[ $platform == "Darwin" ]]; then 
-    export PS1="\[\033[36m\]\w\[\033[m\]@\[\033[32m\] \[\033[33;1m\](\$(git branch 2>/dev/null | grep '^*' | colrm 1 2))\033[m\]  \$ "
-else
-    alias truncdir='pwd | sed "s/\(\/[^\/]*\/[^\/]*\/[^\/]*\)\(\/[^\/]*\).*\(\/[^\/]*\/[^\/]*\)$/...\3/g"'
-    PS1='`truncdir`\$ '
-    function prompt {  
-        local BLACKBOLD="\[\033[0;32m\]"  
-        local RED="\[\033[0;31m\]"  
-        local BLUEBOLD="\[\033[0;34m\]"'`truncdir`'
-        local RESET="\[\033[00m\]"  
-        local git_branch="" #(\$(git branch 2>/dev/null | grep '^*' | colrm 1 2))"
+alias truncdir='pwd | sed "s/\(\/[^\/]*\/[^\/]*\/[^\/]*\)\(\/[^\/]*\).*\(\/[^\/]*\/[^\/]*\)$/...\3/g"'
+PS1='`truncdir`\$ '
+function prompt {  
+    local ORANGE="\[\033[0;33m\]"  
+    local GREEN="\[\033[0;32m\]"  
+    local RED="\[\033[0;31m\]"  
+    local BLUEBOLD="\[\033[0;34m\]"
+    local RESET="\[\033[00m\]"  
+    local git_branch="(\$(git rev-parse --abbrev-ref HEAD 2>/dev/null))"
+    local curr_dir='`truncdir`'
 
-        #export PS1="\n$BLACKBOLD[\t]$GREEN@\h$RESET:$BLUEBOLD$RESET\n$RED$git_branch$RESET"'$'
-        export PS1="\n$RED$git_branch\n$BLACKBOLD$GREEN[\h]$RESET:$BLUEBOLD$RESET$RESET"'\n$'
-    }
-    prompt
-fi;
+    #export PS1="\n$BLACKBOLD[\t]$GREEN@\h$RESET:$BLUEBOLD$RESET\n$RED$git_branch$RESET"'$'
+    if [[ $platform == "Darwin" ]]; then 
+        export PS1="\n$ORANGE[\@]$RESET$RED$git_branch$RESET:$BLUEBOLD$curr_dir$RESET\n"'$'
+    else 
+        export PS1="\n$ORANGE[\@]$RESET$GREEN[\h]$RESET$RED$git_branch$RESET:$BLUEBOLD$curr_dir$RESET\n"'$'
+    fi;
+}
+prompt
 
 #Colorization options
 export TERM=xterm-color
@@ -80,3 +82,9 @@ fi
 if [ -f ~/.profile.local ]; then
     source ~/.profile.local    
 fi 
+
+
+settitle()
+{
+    printf \\033]0\;\%s\\007 "$@"
+}
