@@ -16,9 +16,9 @@ set number
 set noignorecase
 " set cc=78
 
-set shiftwidth=4
-set tabstop=4
-set softtabstop=4 " insert mode tab and backspace use 2 spaces
+set shiftwidth=2
+set tabstop=2
+set softtabstop=2 " insert mode tab and backspace use 2 spaces
 set expandtab     " expand tabs to spaces
 "set wrapmargin=78
 "set textwidth=78
