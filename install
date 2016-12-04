@@ -1,0 +1,5 @@
+ln -sf `pwd`/.git-completion.bash ~/.git-completion.bash 
+ln -sf `pwd`/.gitconfig ~/.gitconfig
+ln -sf `pwd`/.profile ~/.profile
+ln -sf `pwd`/.vim ~/
+ln -sf `pwd`/.vimrc ~/.vimrc

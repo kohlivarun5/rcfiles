@@ -45,11 +45,8 @@ export HISTFILESIZE=20000
 set -o emacs
 shopt -s extglob
 
-# if [[ $platform == "Darwin" ]]; then 
-#     eval `opam config env`
-# fi;    
-
 alias truncdir='pwd | sed "s/\(\/[^\/]*\/[^\/]*\/[^\/]*\)\(\/[^\/]*\).*\(\/[^\/]*\/[^\/]*\)$/...\3/g"'
+
 PS1='`truncdir`\$ '
 function prompt {  
     local ORANGE="\[\033[0;33m\]"  
