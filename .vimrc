@@ -98,7 +98,7 @@ vnoremap y "+y
 
 if has("gui_running")
     if has("gui_gtk2")
-        set guifont=Monospace\ 18
+        set guifont=Fira\ Mono\ 14
     elseif has("gui_macvim")
         set guifont=Menlo\ Regular:h13
     elseif has("gui_win32")
