@@ -35,7 +35,7 @@ set columns=78
 set tags+=tags;$HOME
 set noeb
 set background=dark
-colorscheme vimterial
+colorscheme solarized
 set nocompatible
 set clipboard=unnamed                                        " yank and paste with the system clipboard
 set directory-=.                                             " don't store swapfiles in the current directory
