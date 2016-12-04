@@ -35,7 +35,7 @@ set columns=78
 set tags+=tags;$HOME
 set noeb
 set background=dark
-colorscheme solarized
+colorscheme vimterial
 set nocompatible
 set clipboard=unnamed                                        " yank and paste with the system clipboard
 set directory-=.                                             " don't store swapfiles in the current directory
@@ -185,4 +185,4 @@ endfunction
 command! SmallerFont call SmallerFont()
 map <C-PageDown> :SmallerFont<CR>
 
-let jshint2_save = 1
+let jshint2_save = 1 
