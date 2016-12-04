@@ -185,4 +185,4 @@ endfunction
 command! SmallerFont call SmallerFont()
 map <C-PageDown> :SmallerFont<CR>
 
-let jshint2_save = 1 
+let jshint2_save = 1  
