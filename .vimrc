@@ -97,12 +97,10 @@ set clipboard=unnamed
 vnoremap y "+y
 
 if has("gui_running")
-    if has("gui_gtk2")
-        set guifont=Monospace\ 18
-    elseif has("gui_macvim")
-        set guifont=Menlo\ Regular:h13
-    elseif has("gui_win32")
+    if has("gui_win32")
         set guifont=Consolas:h16:cANSI
+    else 
+        set guifont=Fira\ Mono\ Medium:h14
     endif
 endif
 
