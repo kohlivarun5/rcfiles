@@ -55,6 +55,7 @@ set showcmd
 set smartcase                                                " case-sensitive search if any caps
 set wildignore=log/**,node_modules/**,target/**,tmp/**,*.rbc
 
+set autowrite
 
 "set guioptions-=T  " Remove toolbar for gvim
 set guioptions-=t
@@ -121,32 +122,6 @@ cmap ff<Space> FuzzyFinderFile<CR>
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 match OverLength /\%78v.\+/
 
-if filereadable(expand("~/.vimrc.local"))
-  " In your .vimrc.local, you might like:
-  "
-  " set autowrite
-  " set nocursorline
-  " set nowritebackup
-  " set whichwrap+=<,>,h,l,[,] " Wrap arrow keys between lines
-  "
-  " autocmd! bufwritepost .vimrc source ~/.vimrc
-  " noremap! jj <ESC>
-  source ~/.vimrc.local
-endif
-
-if filereadable(expand("~/.vimrc.dlib"))
-  " In your .vimrc.local, you might like:
-  "
-  " set autowrite
-  " set nocursorline
-  " set nowritebackup
-  " set whichwrap+=<,>,h,l,[,] " Wrap arrow keys between lines
-  "
-  " autocmd! bufwritepost .vimrc source ~/.vimrc
-  " noremap! jj <ESC>
-  source ~/.vimrc.dlib
-endif
-
 
 "autocmd vimenter * NERDTree
 let NERDTreeIgnore = ['\.pyc$']
@@ -188,3 +163,20 @@ map <C-PageDown> :SmallerFont<CR>
 let jshint2_save = 1  
 
 autocmd VimEnter * :Limelight
+
+"map <C-s> :wa <bar> :make <bar> vert copen<CR>
+command M make <bar> copen
+command W make <bar> copen  
+
+if filereadable(expand("~/.vimrc.local"))
+  " In your .vimrc.local, you might like:
+  "
+  " set autowrite
+  " set nocursorline
+  " set nowritebackup
+  " set whichwrap+=<,>,h,l,[,] " Wrap arrow keys between lines
+  "
+  " autocmd! bufwritepost .vimrc source ~/.vimrc
+  " noremap! jj <ESC>
+  source ~/.vimrc.local
+endif
