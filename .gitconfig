@@ -1,19 +1,17 @@
 [user]
-	email = kohli_varun5@yahoo.com
-	name = Varun Kohli
-[filter "media"]
-	clean = git-media-clean %f
-    smudge = git-media-smudge %f
+        name = Varun Kohli
+    email = vkohli5@bloomberg.net
+[http]  
+    proxy = https://devproxy.bloomberg.com:82   
+    sslVerify = false
 [diff]
     tool = tkdiff
 
-[difftool]
-  prompt = false
-[filter "hawser"]
-	clean = git hawser clean %f
-	smudge = git hawser smudge %f
-	required = true
-[filter "lfs"]
-	clean = git lfs clean %f
-	smudge = git lfs smudge %f
-	required = true
+[difftool]    
+    prompt = false
+[push]
+        default = simple
+[hub]
+        host = bbgithub.dev.bloomberg.com
+[core]
+        whitespace = cr-at-eol

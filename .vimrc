@@ -166,6 +166,7 @@ autocmd VimEnter * :Limelight
 
 "map <C-s> :wa <bar> :make <bar> vert copen<CR>
 command W make! FILE=%:t:r <bar> copen 
+command M make! <bar> copen 
 map <C-m> :W<CR>
 
 if filereadable(expand("~/.vimrc.local"))
