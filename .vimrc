@@ -165,8 +165,8 @@ let jshint2_save = 1
 autocmd VimEnter * :Limelight
 
 "map <C-s> :wa <bar> :make <bar> vert copen<CR>
-command M make <bar> copen
-command W make <bar> copen  
+command W make! FILE=%:t:r <bar> copen 
+map <C-m> :W<CR>
 
 if filereadable(expand("~/.vimrc.local"))
   " In your .vimrc.local, you might like:
