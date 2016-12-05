@@ -102,7 +102,7 @@ if has("gui_running")
     elseif has("gui_macvim")
         set guifont=Fira\ Mono\ Medium:h14
     else 
-        set guifont=Fira\ Mono\ Medium\ 14
+        set guifont=Fira\ Mono\ Medium\ 16
     endif
 endif
 
