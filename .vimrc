@@ -35,7 +35,7 @@ set columns=78
 set tags+=tags;$HOME
 set noeb
 set background=dark
-colorscheme solarized
+colorscheme lucario
 set nocompatible
 set clipboard=unnamed                                        " yank and paste with the system clipboard
 set directory-=.                                             " don't store swapfiles in the current directory
@@ -162,7 +162,7 @@ map <C-PageDown> :SmallerFont<CR>
 
 let jshint2_save = 1  
 
-autocmd VimEnter * :Limelight
+"autocmd VimEnter * :Limelight
 
 "map <C-s> :wa <bar> :make <bar> vert copen<CR>
 command W make! FILE=%:t:r <bar> copen 
