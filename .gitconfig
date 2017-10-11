@@ -1,17 +1,12 @@
 [user]
-        name = Varun Kohli
-    email = vkohli5@bloomberg.net
-[http]  
-    proxy = https://devproxy.bloomberg.com:82   
-    sslVerify = false
+    name = Varun Kohli
+    email = kohli.varun5@gmail.com
 [diff]
-    tool = tkdiff
+    tool = diffmerge
 
 [difftool]    
     prompt = false
 [push]
         default = simple
-[hub]
-        host = bbgithub.dev.bloomberg.com
 [core]
         whitespace = cr-at-eol
