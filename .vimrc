@@ -20,6 +20,7 @@ set shiftwidth=2
 set tabstop=2
 set softtabstop=2 " insert mode tab and backspace use 2 spaces
 set expandtab     " expand tabs to spaces
+autocmd FileType make set noexpandtab
 "set wrapmargin=78
 "set textwidth=78
 
