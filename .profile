@@ -22,6 +22,25 @@ alias rm='\rm -i'
 alias cat='\cat -n -s'
 alias cl='\clear; pwd'
 
+
+ccred=$(echo -e "\033[0;31m")
+ccyellow=$(echo -e "\033[0;33m")
+cccyan=$(echo -e "\033[0;36m")
+ccend=$(echo -e "\033[0m")
+
+function make()
+{
+  pathpat="^.*"
+  /opt/bb/bin/make "$@" 2>&1 | sed -E \
+    -e "/^[Ee]rror[: ]/ s%$pathpat%$ccred&$ccend%g" \
+    -e "/^[Ww]arning[: ]/ s%$pathpat%$ccyellow&$ccend%g" \
+    -e "/^[0-9]+ \|/ s%$pathpat%$cccyan&$ccend%g" \
+    -e "/^File \"/ s%$pathpat%$cccyan&$ccend%g"
+  return ${PIPESTATUS[0]}
+}
+
+complete -W "`grep -oE '^[a-zA-Z][a-zA-Z0-9_.-]+:([^=]|$)' Makefile | sed 's/:.*$//'`" make
+
 alias ls='cl; \ls -A -a -F -G -h -l -p '
 #Go to Home
 alias gitdiff='git difftool --no-prompt'
