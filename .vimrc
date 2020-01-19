@@ -163,7 +163,11 @@ map <C-PageDown> :SmallerFont<CR>
 
 let jshint2_save = 1  
 
-"autocmd VimEnter * :Limelight
+let g:strip_whitespace_on_save = 1
+let g:strip_whitelines_at_eof=1
+let g:strip_only_modified_lines=1
+
+autocmd VimEnter * :Limelight
 
 "map <C-s> :wa <bar> :make <bar> vert copen<CR>
 command W make! FILE=%:t:r <bar> copen 
