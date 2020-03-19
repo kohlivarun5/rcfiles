@@ -59,8 +59,8 @@ set wildignore=log/**,node_modules/**,target/**,tmp/**,*.rbc
 set autowrite
 
 "set guioptions-=T  " Remove toolbar for gvim
-set guioptions-=t
-set guioptions-=m  "remove menu bar
+"set guioptions-=t
+"set guioptions-=m  "remove menu bar
 "set guioptions-=r  "remove right-hand scroll bar
 
 
@@ -167,7 +167,7 @@ let g:strip_whitespace_on_save = 1
 let g:strip_whitelines_at_eof=1
 let g:strip_only_modified_lines=1
 
-autocmd VimEnter * :Limelight
+"autocmd VimEnter * :Limelight
 
 "map <C-s> :wa <bar> :make <bar> vert copen<CR>
 command W make! FILE=%:t:r <bar> copen 
