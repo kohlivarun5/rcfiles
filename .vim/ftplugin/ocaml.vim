@@ -1,227 +1,3 @@
-" Marc Weber: TODO review
-
-" Language:    OCaml
-" Maintainer:  David Baelde        <firstname.name@ens-lyon.org>
-"              Mike Leary          <leary@nwlink.com>
-"              Markus Mottl        <markus.mottl@gmail.com>
-"              Stefano Zacchiroli  <zack@bononia.it>
-" URL:         http://www.ocaml.info/vim/ftplugin/ocaml.vim
-" Last Change: 2009 Nov 10 - Added support for looking up definitions
-"                            (MM for <ygrek@autistici.org>)
-"              2009 Sep 10 - Fixed .annot support for OCaml 3.11
-"                            (MM for <ygrek@autistici.org>)
-"              2006 May 01 - Added .annot support for file.whateverext (SZ)
-"
-"              2013 Jun 16   Made loading python lazy, adding efm trace line
-"                            move python code into its own file
-"                            always provide mappings, even if python is not
-"                            supported (will show error when its used)
-"                            moving vim_addon_ocaml#OMLetFoldLevel into
-"                            autoload/vim_addon_ocaml.vim - drop some finish
-"                            guards.
-"
-"                            Rewrite some mappings I care about using s:c lhs
-"                            configuration
-
-if !exists('g:addon_ocaml') | let g:addon_ocaml = {} | endif | let s:c = g:addon_ocaml
-
-
-" Error handling -- helps moving where the compiler wants you to go
-let s:cposet=&cpoptions
-set cpo-=C
-
-" Add mappings, unless the user didn't want this.
-if !exists("no_plugin_maps") && !exists("no_ocaml_maps")
-  " (un)commenting
-  if !hasmapto('<Plug>Comment')
-    nmap <buffer> <LocalLeader>c <Plug>LUncomOn
-    vmap <buffer> <LocalLeader>c <Plug>BUncomOn
-    nmap <buffer> <LocalLeader>C <Plug>LUncomOff
-    vmap <buffer> <LocalLeader>C <Plug>BUncomOff
-  endif
-
-  nnoremap <buffer> <Plug>LUncomOn mz0i(* <ESC>$A *)<ESC>`z
-  nnoremap <buffer> <Plug>LUncomOff :s/^(\* \(.*\) \*)/\1/<CR>:noh<CR>
-  vnoremap <buffer> <Plug>BUncomOn <ESC>:'<,'><CR>`<O<ESC>0i(*<ESC>`>o<ESC>0i*)<ESC>`<
-  vnoremap <buffer> <Plug>BUncomOff <ESC>:'<,'><CR>`<dd`>dd`<
-
-  if !hasmapto('<Plug>Abbrev')
-    iabbrev <buffer> ASF (assert false (* XXX *))
-    iabbrev <buffer> ASS (assert (0=1) (* XXX *))
-  endif
-endif
-
-" Let % jump between structure elements (due to Issac Trotts)
-let b:mw = ''
-let b:mw = b:mw . ',\<let\>:\<and\>:\(\<in\>\|;;\)'
-let b:mw = b:mw . ',\<if\>:\<then\>:\<else\>'
-let b:mw = b:mw . ',\<\(for\|while\)\>:\<do\>:\<done\>,'
-let b:mw = b:mw . ',\<\(object\|sig\|struct\|begin\)\>:\<end\>'
-let b:mw = b:mw . ',\<\(match\|try\)\>:\<with\>'
-let b:match_words = b:mw
-
-let b:match_ignorecase=0
-
-" switching between interfaces (.mli) and implementations (.ml)
-if !exists("g:did_ocaml_switch")
-  let g:did_ocaml_switch = 1
-  map <LocalLeader>s :call OCaml_switch(0)<CR>
-  map <LocalLeader>S :call OCaml_switch(1)<CR>
-  fun OCaml_switch(newwin)
-    if (match(bufname(""), "\\.mli$") >= 0)
-      let fname = substitute(bufname(""), "\\.mli$", ".ml", "")
-      if (a:newwin == 1)
-        exec "new " . fname
-      else
-        exec "arge " . fname
-      endif
-    elseif (match(bufname(""), "\\.ml$") >= 0)
-      let fname = bufname("") . "i"
-      if (a:newwin == 1)
-        exec "new " . fname
-      else
-        exec "arge " . fname
-      endif
-    endif
-  endfun
-endif
-
-" Folding support
-
-" Get the modeline because folding depends on indentation
-let s:s = line2byte(line('.'))+col('.')-1
-if search('^\s*(\*:o\?caml:')
-  let s:modeline = getline(".")
-else
-  let s:modeline = ""
-endif
-if s:s > 0
-  exe 'goto' s:s
-endif
-
-" Get the indentation params
-let s:m = matchstr(s:modeline,'default\s*=\s*\d\+')
-if s:m != ""
-  let s:idef = matchstr(s:m,'\d\+')
-elseif exists("g:omlet_indent")
-  let s:idef = g:omlet_indent
-else
-  let s:idef = 2
-endif
-let s:m = matchstr(s:modeline,'struct\s*=\s*\d\+')
-if s:m != ""
-  let s:i = matchstr(s:m,'\d\+')
-elseif exists("g:omlet_indent_struct")
-  let s:i = g:omlet_indent_struct
-else
-  let s:i = s:idef
-endif
-
-" Set the folding method
-if exists("g:ocaml_folding")
-  setlocal foldmethod=expr
-  setlocal foldexpr=vim_addon_ocaml#OMLetFoldLevel(v:lnum)
-endif
-
-" - Only definitions below, executed once -------------------------------------
-
-function! s:topindent(lnum)
-  let l = a:lnum
-  while l > 0
-    if getline(l) =~ '\s*\%(\<struct\>\|\<sig\>\|\<object\>\)'
-      return indent(l)
-    endif
-    let l = l-1
-  endwhile
-  return -s:i
-endfunction
-
-" .annot file support {{{1
-
-" Vim support for OCaml .annot files (requires Vim with python support)
-"
-" Executing OCamlPrintType(<mode>) function will display in the Vim bottom
-" line(s) the type of an ocaml value getting it from the corresponding .annot
-" file (if any).  If Vim is in visual mode, <mode> should be "visual" and the
-" selected ocaml value correspond to the highlighted text, otherwise (<mode>
-" can be anything else) it corresponds to the literal found at the current
-" cursor position.
-"
-" .annot files are parsed lazily the first time OCamlPrintType is invoked; is
-" also possible to force the parsing using the OCamlParseAnnot() function.
-"
-" Typing '<LocalLeader>t' (usually ',t') will cause OCamlPrintType function 
-" to be invoked with the right argument depending on the current mode (visual 
-" or not).
-"
-" Copyright (C) <2003-2004> Stefano Zacchiroli <zack@bononia.it>
-"
-" Created:        Wed, 01 Oct 2003 18:16:22 +0200 zack
-" LastModified:   Wed, 25 Aug 2004 18:28:39 +0200 zack
-" LastModified:   June 2013 Marc Weber (moving py code into autoload/python-code.py)
-"
-" '<LocalLeader>d' will find the definition of the name under the cursor
-" and position cursor on it (only for current file) or print fully qualified name
-" (for external definitions). (ocaml >= 3.11)
-"
-" Additionally '<LocalLeader>t' will show whether function call is tail call
-" or not. Current implementation requires selecting the whole function call
-" expression (in visual mode) to work. (ocaml >= 3.11)
-"
-" Copyright (C) 2009 <ygrek@autistici.org>
-
-" Its important to be lazy for speed reasons. On Windows the by .dll is load
-" lazily. Thus only initialize if the user acutally wants to use Snipmate
-let s:plugin_root = expand('<sfile>:h:h')
-fun! s:c.Py(command)
-  if !has_key(s:c, 'PyCommand')
-    if !has_key(s:c, 'PyCommand')
-      try
-        " try python3
-        py3 import vim; vim.command('let g:addon_ocaml.PyCommand = "py3 "')
-      catch /.*/ 
-        try
-          " try python2
-          py import vim; vim.command('let g:addon_ocaml.PyCommand = "py "')
-        catch /.*/ | endtry
-      endtry
-    endif
-  endif
-
-  if !has_key(s:c, 'PyCommand') | throw "no working python found" | endif
-
-  " load py code:
-  if !has_key(s:c, 'did_python_setup')
-    exec 'pyfile '.fnameescape(s:plugin_root.'/autoload/python-code.py')
-    let s:c.did_python_setup = 1
-  endif
-
-  " run the python command
-  exec s:c.PyCommand.a:command
-endf
-
-
-exec 'nnoremap <buffer> '.s:c.map_print_type." :call vim_addon_ocaml#Type('normal')<CR>"
-" exec 'vnoremap <buffer> '.s:c.map_print_type." :call g:addon_ocaml.Py('printOCamlType(\"visual\")')<CR>"
-exec 'nnoremap <buffer> '.s:c.map_goto." :call vim_addon_ocaml#Goto('normal')<CR>"
-" exec 'vnoremap <buffer> '.s:c.map_goto." :call g:addon_ocaml.Py('gotoOCamlDefinition(\"normal\")')<CR>"
-
-" }}}
-
-let &cpoptions=s:cposet
-unlet s:cposet
-
-command! -buffer RevisedSyntax  update | call views#View("exec",["camlp4o", 'pr_r.cmo', expand('%')])
-
-setlocal tabstop=2
-setlocal softtabstop=2
-setlocal shiftwidth=2
-setlocal smarttab
-setlocal expandtab
-
-
-"" Ocaml let stuff 
-
 " Language:    OCaml
 " Maintainer:  David Baelde        <firstname.name@ens-lyon.org>
 "              Mike Leary          <leary@nwlink.com>
@@ -231,10 +7,10 @@ setlocal expandtab
 "              Vincent Aravantinos <firstname.name@imag.fr>
 " URL:         http://www.ocaml.info/vim/ftplugin/ocaml.vim
 " Last Change:
+"              2013 Oct 27 - Added commentstring (MM)
 "              2013 Jul 26 - load default compiler settings (MM)
 "              2013 Jul 24 - removed superfluous efm-setting (MM)
 "              2013 Jul 22 - applied fixes supplied by Hirotaka Hamada (MM)
-"              2013 Mar 15 - Improved error format (MM)
 
 if exists("b:did_ftplugin")
   finish
@@ -261,6 +37,10 @@ endif
 let s:cposet=&cpoptions
 set cpo&vim
 
+" Comment string
+setlocal comments=
+setlocal commentstring=(*%s*)
+
 " Add mappings, unless the user didn't want this.
 if !exists("no_plugin_maps") && !exists("no_ocaml_maps")
   " (un)commenting
@@ -284,15 +64,38 @@ if !exists("no_plugin_maps") && !exists("no_ocaml_maps")
 endif
 
 " Let % jump between structure elements (due to Issac Trotts)
-let b:mw = ''
-let b:mw = b:mw . ',\<let\>:\<and\>:\(\<in\>\|;;\)'
+let b:mw =         '\<let\>:\<and\>:\(\<in\>\|;;\)'
 let b:mw = b:mw . ',\<if\>:\<then\>:\<else\>'
-let b:mw = b:mw . ',\<\(for\|while\)\>:\<do\>:\<done\>,'
+let b:mw = b:mw . ',\<\(for\|while\)\>:\<do\>:\<done\>'
 let b:mw = b:mw . ',\<\(object\|sig\|struct\|begin\)\>:\<end\>'
 let b:mw = b:mw . ',\<\(match\|try\)\>:\<with\>'
 let b:match_words = b:mw
 
 let b:match_ignorecase=0
+
+function! s:OcpGrep(bang,args) abort
+  let grepprg = &l:grepprg
+  let grepformat = &l:grepformat
+  let shellpipe = &shellpipe
+  try
+    let &l:grepprg = "ocp-grep -c never"
+    setlocal grepformat=%f:%l:%m
+    if &shellpipe ==# '2>&1| tee' || &shellpipe ==# '|& tee'
+      let &shellpipe = "| tee"
+    endif
+    execute 'grep! '.a:args
+    if empty(a:bang) && !empty(getqflist())
+      return 'cfirst'
+    else
+      return ''
+    endif
+  finally
+    let &l:grepprg = grepprg
+    let &l:grepformat = grepformat
+    let &shellpipe = shellpipe
+  endtry
+endfunction
+command! -bar -bang -complete=file -nargs=+ Ocpgrep exe s:OcpGrep(<q-bang>, <q-args>)
 
 " switching between interfaces (.mli) and implementations (.ml)
 if !exists("g:did_ocaml_switch")
@@ -321,15 +124,8 @@ endif
 " Folding support
 
 " Get the modeline because folding depends on indentation
-let s:s = line2byte(line('.'))+col('.')-1
-if search('^\s*(\*:o\?caml:')
-  let s:modeline = getline(".")
-else
-  let s:modeline = ""
-endif
-if s:s > 0
-  exe 'goto' s:s
-endif
+let lnum = search('^\s*(\*:o\?caml:', 'n')
+let s:modeline = lnum? getline(lnum): ""
 
 " Get the indentation params
 let s:m = matchstr(s:modeline,'default\s*=\s*\d\+')
@@ -364,6 +160,17 @@ let b:undo_ftplugin = "setlocal efm< foldmethod< foldexpr<"
 if exists("*OMLetFoldLevel")
   finish
 endif
+
+function s:topindent(lnum)
+  let l = a:lnum
+  while l > 0
+    if getline(l) =~ '\s*\%(\<struct\>\|\<sig\>\|\<object\>\)'
+      return indent(l)
+    endif
+    let l = l-1
+  endwhile
+  return -s:i
+endfunction
 
 function OMLetFoldLevel(l)
 
@@ -584,9 +391,9 @@ endfunction
     endif
   endfun
 
-  " This variable contain a dictionnary of list. Each element of the dictionnary
-  " represent an annotation system. An annotation system is a list with :
-  " - annotation file name as it's key
+  " This variable contains a dictionary of lists. Each element of the dictionary
+  " represents an annotation system. An annotation system is a list with:
+  " - annotation file name as its key
   " - annotation file path as first element of the contained list
   " - build path as second element of the contained list
   " - annot_file_last_mod (contain the date of .annot file) as third element
@@ -784,9 +591,9 @@ endfunction
         let annot_file_name = s:Fnameescape(expand('%:t:r')).'.annot'
         call s:Locate_annotation()
         call s:Load_annotation(annot_file_name)
-	let res = s:Get_type(a:mode, annot_file_name)
+        let res = s:Get_type(a:mode, annot_file_name)
         " Copy result in the unnamed buffer
-	let @" = s:unformat_ocaml_type(res)
+        let @" = s:unformat_ocaml_type(res)
         return res
       endfun
     endif
@@ -830,325 +637,5 @@ endfunction
 let &cpoptions=s:cposet
 unlet s:cposet
 
-
-" The following code allow a 'let' to match its 'in' and the contrary.
-"
-" It does not conflict when "let" or "in" is present in a comment.
-
-python << #PYTHON#
-import vim
-class OutOfCodePosition(Exception):
-  """Exception trown when position is invalid. """
-  def __init__(self): pass
-
-class Position :
-  """A simple position in the source code, or not present."""
-
-  #lign_col == (0,0) or lign_col is None means OutOfCode.
-  def __init__(self, lign_col):
-    #~~~~~~~~ class variable ~~~~~~~~~
-    # _not_in_code : Boolean
-    # _lign : int
-    # _col : int
-    #~~~~~ class variable END ~~~~~~~~
-    if(lign_col is None or lign_col == (0,0)):
-      self._not_in_code = True
-      self._lign = None
-      self._col = None
-    else :
-      if(not(isinstance(lign_col[0] ,int)) or not (isinstance(lign_col[1], int))):
-        raise TypeError
-      if((lign_col[0] <0 or lign_col[1] <0 )):
-        raise TypeError
-      self._not_in_code = False
-      self._lign=lign_col[0]
-      self._col=lign_col[1]
-
-  def lign(self): 
-    """ Return current lign or throw OutOfCodePosition if out of code. """
-    if(self._not_in_code):
-      raise OutOfCodePosition
-    return self._lign
-
-  def col(self): 
-    """ Return current colon or throw OutOfCodePosition if out of code. """
-    if(self._not_in_code):
-      raise OutOfCodePosition
-    return self._col
-
-  def to_string(self) :
-    if(self._not_in_code):
-      return "Pos: out of code."
-    else :
-      return "lign: "+str(self._lign)+"\ncol: "+str(self._col)
-
-  def is_out_of_code(self):
-    """Return True if position is out of code. Else return false."""
-    return self._not_in_code
-
-  def is_before(self,other_pos):
-    """ Return true if sel is before other_pos, else return false """
-    if(not (isinstance(other_pos, Position))):
-      raise TypeError
-    if (self._not_in_code or other_pos._not_in_code):
-      raise OutOfCodePosition
-    if(self._lign < other_pos._lign):
-      return True
-    if(self._lign == other_pos._lign and self._col < other_pos._col):
-      return True
-    return False
-
-  def next(self): 
-    """ Return the next Position. @raise OutOfCodePosition if position is
-    outOfCode """
-    if(self._not_in_code):
-      raise OutOfCodePosition
-    else :
-      return Position((self._lign, self._col+1))
-
-  def previous(self): 
-    """ Return the previous Position. @raise OutOfCodePosition if position is 
-    outOfCode (or leads to outOfCode). """
-    if (self._not_in_code):
-      raise OutOfCodePosition
-    else :
-      if(self._col==1):
-        if(self._lign==1):
-          raise OutOfCodePosition
-        else :
-          return Position((self._lign-1, self._col+404))
-      else :
-        return Position((self._lign, self._col-1))
-
-    
-class OcamlWord:
-  """ A word in the code. It has a name (== value) and a position."""
-  def __init__(self, name, pos):
-    #~~~~~~~~ class variable ~~~~~~~~~
-    # name : string
-    # pos : Position
-    #~~~~~ class variable END ~~~~~~~~
-    if(not (isinstance(name, str)) or not (isinstance(pos, Position))):
-      print "type error in OcamlWord constructor!!"
-      raise TypeError
-    self.name = name 
-    self.pos= pos 
-
-  def to_string(self):
-    return "~~OcamlWord~~\n"+self.name+"\n"+self.pos.to_string()+"\n"+"~~~~\n"
-
-
-class OcamlUtil:
-  """ Various utility function. Every function is static and no instance of
-the class should be created."""
-
-  def __init__(self):
-    assert false
-
-  @staticmethod
-  def is_in_comment(pos):
-    """ return True if pos is in a comment, else false. """
-    if(not (isinstance (pos, Position))):
-      raise TypeError
-    if(pos.is_out_of_code()):
-      return False
-    else :
-      lign, col = pos.lign(), pos.col()
-      old_pos=vim.eval('getpos(".")')
-      vim.eval('cursor('+str(lign)+','+str(col)+')')
-      #match the previous starting comment.
-      start_cmmt = vim.eval('searchpos("(\\\*","b")')
-      if (int(start_cmmt[0]) == 0 and int(start_cmmt[1]) == 0):
-        res = False
-      else :
-        vim.eval('cursor('+str(lign)+','+str(col)+')')
-        #match the next ending comment.
-        end_cmmt = vim.eval('searchpos("\\\*)","b")')
-      if (int(start_cmmt[0]) == 0 and int (start_cmmt[1]) == 0):
-        res = True
-      else :
-        end_cmmt_pos = Position((int(end_cmmt[0]), int(end_cmmt[1])))
-        start_cmmt_pos = Position((int(start_cmmt[0]), int(start_cmmt[1])))
-
-        res = (end_cmmt_pos. is_before(start_cmmt_pos))
-      vim.eval('cursor('+str(old_pos[1])+','+str(old_pos[2])+')')
-      return res
-
-
-  #lign and col are strings
-  @staticmethod
-  def is_in_string(pos):
-    """ Return True if pos in in a string. Else false."""
-    if(not (isinstance (pos, Position))):
-      raise TypeError
-    if(pos.is_out_of_code()): #if not in code
-      return False
-    else :
-      lign,col = str(pos.lign()), str(pos.col())
-      syn_type = vim.eval('synIDattr(synID('+lign+','+col+',1),"name")')
-      if(syn_type=="ocamlString"):
-        return True
-      return False
-
-
-
-  #lign and col are strings
-  @staticmethod
-  def is_in_comment_or_string(pos):
-    """ Return True if pos in in a string or a comment. Else false. Raise
-    TypeError if pos is not a Position."""
-    cmt = OcamlUtil.is_in_comment(pos)
-    isstr = OcamlUtil.is_in_string(pos)
-    return (cmt or isstr)
-
-
-#Main function
-#If we are on a 'let' or 'in' word, jump to its corresponding 'let'/'in'.
-#Return None but move cursor.
-def ocamlFindScope():
-  try :
-    (row, col) = vim.current.window.cursor
-    from_position = Position((int(row),int(col)))
-    name = vim.eval('expand("<cword>")')
-    if OcamlUtil.is_in_comment_or_string(from_position):
-      return
-    if(name == "let"):
-      try :
-        pos = search_forward(from_position)
-      except OutOfCodePosition:
-        return
-      vim.eval('cursor('+str(pos.lign())+','+str(pos.col())+')')
-    if(name == "in"):
-      try :
-        pos = search_backward(from_position)
-      except OutOfCodePosition:
-        return
-      vim.eval('cursor('+str(pos.lign())+','+str(pos.col())+')')
-  except OutOfCodePosition: pass
-    
-
-#return (lign, col) where pattern is found.
-# go backward if backward==True, else go forward.
-def match(pattern, backward=False):
-  if backward :
-    req = "searchpos('"+pattern+"', 'bn')"
-  else :
-    req = "searchpos('"+pattern+"', 'n')"
-  return vim.eval(req)
-
-
-def match_next(search_start):
-  """ match next 'let' or 'in' (ignoring string and comment). Return an OcamlWord."""
-  old_pos=vim.eval('getpos(".")')
-  vim.eval('cursor('+str(search_start.lign())+','+str(search_start.col())+')')
-  while(True): #python has no do-while.
-    (line, col) = match('\<let\>')
-    next_let_pos = Position((int(line), int(col)))
-    if(not(OcamlUtil.is_in_comment_or_string(next_let_pos))): break
-    vim.eval('cursor('+str(line)+','+str(col)+')')
-
-  vim.eval('cursor('+str(search_start.lign())+','+str(search_start.col())+')')
-  next_let_pos = Position((int(line), int(col)))
-  while(True): #python still has no do-while.
-    (line, col) = match('\<in\>')
-    next_in_pos = Position((int(line), int(col)))
-    if(not(OcamlUtil.is_in_comment_or_string(next_in_pos))): break
-    vim.eval('cursor('+str(line)+','+str(col)+')')
-
-  vim.eval('cursor('+str(old_pos[1])+','+str(old_pos[2])+')')
-  try :
-    is_before = next_let_pos.is_before(next_in_pos)
-  except OutOfCodePosition:
-      if(next_let_pos.is_out_of_code()): is_before = False 
-      else : is_before =  True
-  if(is_before):
-    return OcamlWord("let",next_let_pos)
-  else : 
-    return OcamlWord("in",next_in_pos)
-    
-
-def match_previous(search_start):
-  """ match previous 'let' or 'in' (ignoring string and comment). Return an OcamlWord."""
-  old_pos=vim.eval('getpos(".")')
-  vim.eval('cursor('+str(search_start.lign())+','+str(search_start.col())+')')
-  while(True): #python has no do-while.
-    (line, col) = match('\<let\>', True)
-    next_let_pos = Position((int(line), int(col)))
-    if(not(OcamlUtil.is_in_comment_or_string(next_let_pos))):  break
-    vim.eval('cursor('+str(line)+','+str(col)+')')
-
-  vim.eval('cursor('+str(search_start.lign())+','+str(search_start.col())+')')
-  while(True): #python still has no do-while.
-    (line, col) = match('\<in\>', True)
-    next_in_pos = Position((int(line), int(col)))
-    if(not(OcamlUtil.is_in_comment_or_string(next_in_pos))): break
-    vim.eval('cursor('+str(line)+','+str(col)+')')
-
-  vim.eval('cursor('+str(old_pos[1])+','+str(old_pos[2])+')')
-  try :
-    is_before = next_in_pos.is_before(next_let_pos)
-  except OutOfCodePosition:
-      if(next_in_pos.is_out_of_code()): is_before = True
-      else : is_before = False
-  if(is_before):
-    return OcamlWord("let",next_let_pos)
-  else : 
-    return OcamlWord("in",next_in_pos)
-
-
-
-def search_forward(search_start):
-  """"From a Position search_start (matching a let) return the position of the
-  corresponding in."""
-  try : 
-    next = match_next(search_start.next())
-    if(next.name=="let"):
-      next_in = search_forward (next.pos.next())
-      return search_forward(next_in.next())
-    else :
-      #in found
-      return next.pos
-  except OutOfCodePosition:
-    return Position(None)
-
-def search_backward(search_start):
-  """"From a Position search_start (matching a in) return the position of the
-  corresponding 'let'."""
-  try :
-    previous = match_previous(search_start.previous())
-    if(previous.name=="in"):
-      prev_let = search_backward (previous.pos.previous())
-      return search_backward(prev_let)
-    else:
-      #let found
-      return previous.pos
-  except OutOfCodePosition:
-    return Position(None)
-
-
-
-
-def is_toplevel(curlet):
-  """From a let OcamlWord, state if it is a toplevel. Return true if it, else
-  false."""
-  prev = match_previous(curlet.pos)
-  if(prev.name=="in"):
-    return False
-  else:
-    return True
-
-
-#PYTHON#
-"end of the python script
-
-function! Ocaml_jump_sccope()
-python << endpython
-ocamlFindScope()
-endpython
-"end of the python script
-endfun
-
-map  <silent> <LocalLeader>j :call Ocaml_jump_sccope()<CR>
-
-
 " vim:sw=2 fdm=indent
+
