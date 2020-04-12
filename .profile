@@ -31,7 +31,7 @@ ccend=$(echo -e "\033[0m")
 function make()
 {
   pathpat="^.*"
-  /opt/bb/bin/make "$@" 2>&1 | sed -E \
+  make "$@" 2>&1 | sed -E \
     -e "/^[Ee]rror[: ]/ s%$pathpat%$ccred&$ccend%g" \
     -e "/^[Ww]arning[: ]/ s%$pathpat%$ccyellow&$ccend%g" \
     -e "/^[0-9]+ \|/ s%$pathpat%$cccyan&$ccend%g" \
@@ -104,3 +104,7 @@ settitle()
 {
     printf \\033]0\;\%s\\007 "$@"
 }
+
+alias ls-size="du -sh * | sort -rh"
+alias space="df -h ."
+
