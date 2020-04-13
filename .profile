@@ -28,10 +28,12 @@ ccyellow=$(echo -e "\033[0;33m")
 cccyan=$(echo -e "\033[0;36m")
 ccend=$(echo -e "\033[0m")
 
+alias make_cmd=`(which make)`
+
 function make()
 {
   pathpat="^.*"
-  make "$@" 2>&1 | sed -E \
+  make_cmd "$@" 2>&1 | sed -E \
     -e "/^[Ee]rror[: ]/ s%$pathpat%$ccred&$ccend%g" \
     -e "/^[Ww]arning[: ]/ s%$pathpat%$ccyellow&$ccend%g" \
     -e "/^[0-9]+ \|/ s%$pathpat%$cccyan&$ccend%g" \
