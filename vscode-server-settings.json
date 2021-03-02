@@ -1,0 +1,45 @@
+{
+    "C_Cpp.intelliSenseCacheSize": 512,
+    "git.ignoreLimitWarning": true,
+    "files.exclude": {
+        "*.a": true,
+        "*.so": true,
+        "*.o": true,
+        "*.tsk": true,
+        "**/_build": true,
+        "**/_refroot": true,
+        "**/.ignore": true,
+        "**/build": true,
+        "**/refroot": true
+    },
+    "files.watcherExclude": {
+        "**/_build": true,
+        "**/_refroot": true,
+        "**/.git": true,
+        "**/*.exe": true,
+        "**/*.tsk": true,
+        "**/*.a": true,
+        "**/*.o": true,
+        "**/build": true,
+        "**/node_modules": true,
+        "**/refroot": true
+    },
+    "ocaml-formatter.ocamlformat-path": "/opt/bb/bin/ocamlformat",
+    "reason.path.env": "/opt/bb/bin/env",
+    "reason.path.ocamlfind": "/opt/bb/bin/ocamlfind",
+    "reason.path.ocamlmerlin": "/opt/bb/bin/ocamlmerlin",
+    "reason.path.ocpindent": "/opt/bb/bin/ocp-indent",
+    "reason.diagnostics.tools": [
+        "merlin"
+    ],
+    "http.proxy": "http://devproxy.bloomberg.com:82",
+    "http.proxyStrictSSL": false,
+    "http.proxySupport": "override",
+    "files.autoSave": "afterDelay",
+    "editor.suggestSelection": "first",
+    "editor.formatOnSave": true,
+    "clang-format.executable": "/opt/bb/bin/clang-format",
+    "[ocaml]": {
+        "editor.defaultFormatter": "badochov.ocaml-formatter",
+    }
+}

@@ -1,0 +1,87 @@
+{
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": true,
+        "strings": true
+    },
+    "solidity.enabledAsYouTypeCompilationErrorCheck": false,
+    "solidity.enableLocalNodeCompiler": false,
+    "solidity.formatter": "none",
+    "headerSourceSwitch.mappings": [
+
+
+        {
+            "header": [
+                ".h",
+                ".hpp",
+                ".hh",
+                ".hxx"
+            ],
+            "source": [
+                ".cpp",
+                ".c",
+                ".cc",
+                ".cxx",
+                ".m",
+                ".mm"
+            ],
+            "name": "C++"
+        },
+        {
+            "header": [
+                ".mli"
+            ],
+            "source": [
+                ".ml"
+            ],
+            "name": "OCaml"
+        }
+    ],
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "breadcrumbs.enabled": true,
+    "editor.renderWhitespace": "none",
+    "AllAutocomplete.cycleOpenDocumentsOnLaunch": true,
+    "editor.accessibilitySupport": "off",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "remote.downloadExtensionsLocally": true,
+    "remote.SSH.configFile": "C:/Users/KohliVarun/.ssh/config",
+    "remote.SSH.path": "ssh.exe",
+    "remote.SSH.logLevel": "trace",
+    "remote.SSH.lockfilesInTmp": true,
+    "remote.SSH.suppressWindowsSshWarning": true,
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\wsl.exe",
+    "files.watcherExclude": {
+        "**/_build": true,
+        "**/_refroot": true,
+        "**/.git": true,
+        "**/*.exe": true,
+        "**/*.tsk": true,
+        "**/*.a": true,
+        "**/*.o": true,
+        "**/build": true,
+        "**/node_modules": true,
+        "**/refroot": true
+    },
+    "reason.path.ocamlmerlin": "/opt/bb/bin/ocamlmerlin",
+    "terminal.integrated.shell.linux": "/opt/bb/bin/bash",
+    "remote.SSH.useLocalServer": false,
+    "remote.SSH.enableDynamicForwarding": false,
+    "remote.SSH.enableAgentForwarding": false,
+    "remote.SSH.remoteServerListenOnSocket": true,
+    "C_Cpp.default.compilerPath": "/opt/bb/bin/clang",
+    "C_Cpp.configurationWarnings": "Disabled",
+    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "files.exclude": {
+        "**/_build/**": true,
+        "**/_refroot/**": true,
+        "**/*.exe": true,
+        "**/*.o": true,
+        "**/*.tsk": true,
+        "**/build/**": true,
+        "**/refroot/**": true
+    },
+    "C_Cpp.workspaceSymbols": "All",
+    "git.ignoreLegacyWarning": true,
+    "remote.SSH.showLoginTerminal": true,
+    "workbench.editor.enablePreview": false,
+}
