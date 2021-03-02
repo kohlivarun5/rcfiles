@@ -24,6 +24,7 @@
         "**/node_modules": true,
         "**/refroot": true
     },
+    "ocaml-formatter.profile": "bloomberg",
     "ocaml-formatter.ocamlformat-path": "/opt/bb/bin/ocamlformat",
     "reason.path.env": "/opt/bb/bin/env",
     "reason.path.ocamlfind": "/opt/bb/bin/ocamlfind",
@@ -39,6 +40,9 @@
     "editor.suggestSelection": "first",
     "editor.formatOnSave": true,
     "clang-format.executable": "/opt/bb/bin/clang-format",
+    "[cpp]": {
+        "editor.defaultFormatter": "xaver.clang-format",
+    },
     "[ocaml]": {
         "editor.defaultFormatter": "badochov.ocaml-formatter",
     }
