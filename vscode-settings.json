@@ -62,7 +62,6 @@
         "**/node_modules": true,
         "**/refroot": true
     },
-    "reason.path.ocamlmerlin": "/opt/bb/bin/ocamlmerlin",
     "terminal.integrated.shell.linux": "/opt/bb/bin/bash",
     "remote.SSH.useLocalServer": false,
     "remote.SSH.enableDynamicForwarding": false,
