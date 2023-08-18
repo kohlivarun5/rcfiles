@@ -1,13 +1,3 @@
-if [ "$0"x = "-ksh"x ]; 
-then  
-    if [ -x /bin/bash ]; 
-    then    
-        SHELL=/bin/bash    
-        export SHELL    
-        exec /bin/bash  
-    fi
-fi
-
 platform=`(uname -a | awk '{print $1}')`
 if [[ $platform == "Darwin" ]]; then 
     alias gvim='\mvim -O'
