@@ -1,2 +1,3 @@
-find ./ -maxdepth 1 -name ".*" -not -path "/root/dotfiles/.git" | xargs -i basename {} | xargs -i ln -sf ./{} ~/{}
-command -v code-server && curl -o /tmp/vscode-ollama.vsix -L --silent --show-error --fail https://github.com/kohlivarun5/vscode-ollama/releases/download/latest/vscode-ollama.vsix && code --install-extension /tmp/vscode-ollama.vsix
+DIRECTORY=$(dirname "$0")
+find $DIRECTORY/ -maxdepth 1 -name ".*" -not -path "$DIRECTORY/.git" | xargs -i basename {} | xargs -i ln -sf $DIRECTORY/{} ~/{}
+command -v code-server && curl -o /tmp/vscode-ollama.vsix -L --silent --show-error --fail https://github.com/kohlivarun5/vscode-ollama/releases/download/latest/vscode-ollama.vsix && code-server --install-extension /tmp/vscode-ollama.vsix
