@@ -1,5 +1,2 @@
-ln -sf `pwd`/.git-completion.bash ~/.git-completion.bash 
-ln -sf `pwd`/.bashrc ~/.bashrc
-ln -sf `pwd`/.profile ~/.profile
-ln -sf `pwd`/.vim ~/
-ln -sf `pwd`/.vimrc ~/.vimrc
+find ./ -maxdepth 1 -name ".*" -not -path "/root/dotfiles/.git" | xargs -i basename {} | xargs -i ln -sf ./{} ~/{}
+command -v code-server && curl -o /tmp/vscode-ollama.vsix -L --silent --show-error --fail https://github.com/kohlivarun5/vscode-ollama/releases/download/latest/vscode-ollama.vsix && code --install-extension /tmp/vscode-ollama.vsix
